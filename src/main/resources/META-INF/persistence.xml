@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+    <persistence-unit name="default">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java://jdbc/postgres</jta-data-source>
+        <class>itmo.efarinov.soa.collectionmanager.entity.WorkerEntity</class>
+        <class>itmo.efarinov.soa.collectionmanager.entity.CoordinatesEntity</class>
+        <class>itmo.efarinov.soa.collectionmanager.entity.OrganizationEntity</class>
+        <class>itmo.efarinov.soa.collectionmanager.entity.Position</class>
+        <properties>
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+        </properties>
+    </persistence-unit>
+</persistence>
