@@ -2,6 +2,7 @@ package itmo.efarinov.soa.collectionmanager.filter;
 
 import itmo.efarinov.soa.collectionmanager.dto.FilterDto;
 import itmo.efarinov.soa.collectionmanager.entity.WorkerEntity;
+import itmo.efarinov.soa.collectionmanager.error.BadFilterException;
 import lombok.SneakyThrows;
 
 import java.time.LocalDateTime;
@@ -21,14 +22,30 @@ public class WorkerFilterMapper implements CommonEntityFilterMapper<WorkerEntity
             case "position":
                 return dto.toModel();
             case "salary":
-                return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), Double.parseDouble(dto.getFieldValue()));
+                try {
+                    return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), Double.parseDouble(dto.getFieldValue()));
+                } catch (NumberFormatException e) {
+                    throw new BadFilterException("salary should be a double. Filter: '" + dto + "'");
+                }
             case "id":
-                return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), Integer.parseInt(dto.getFieldValue()));
+                try {
+                    return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), Integer.parseInt(dto.getFieldValue()));
+                } catch (NumberFormatException e) {
+                    throw new BadFilterException("id should be an int. Filter: '" + dto + "'");
+                }
             case "creationDate":
             case "startDate":
-                return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), LocalDateTime.parse(dto.getFieldValue(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                try {
+                    return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), LocalDateTime.parse(dto.getFieldValue(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } catch (NumberFormatException e) {
+                    throw new BadFilterException("date should be in ISO_LOCAL_DATE_TIME. Filter: '" + dto + "'");
+                }
             case "endDate":
-                return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), LocalDateTime.parse(dto.getFieldValue(), DateTimeFormatter.ISO_ZONED_DATE_TIME));
+                try {
+                    return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), LocalDateTime.parse(dto.getFieldValue(), DateTimeFormatter.ISO_ZONED_DATE_TIME));
+                } catch (NumberFormatException e) {
+                    throw new BadFilterException("end date should be in ISO_ZONED_DATE_TIME. Filter: '" + dto + "'");
+                }
             default:
                 throw new NoSuchFieldException(String.format("No such field '%s' to filter", dto.getFieldName()));
         }

@@ -22,4 +22,6 @@ public interface ICrudRepository<T> {
     List<T> getByFilter(CriteriaQuery<?> query, int pageSize, int page);
 
     List<T> getByFilter(List<FilterPredicate<?>> query, int pageSize, int page, SortingOrder sortingOrder);
+
+    long countByFilter(List<FilterPredicate<?>> query);
 }

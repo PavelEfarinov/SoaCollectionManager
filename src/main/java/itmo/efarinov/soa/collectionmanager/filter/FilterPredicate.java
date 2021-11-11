@@ -1,11 +1,13 @@
 package itmo.efarinov.soa.collectionmanager.filter;
 
 import itmo.efarinov.soa.collectionmanager.utils.JsonableModel;
+import lombok.Data;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+@Data
 public class FilterPredicate<T extends Comparable<T>> extends JsonableModel {
     private final String fieldName;
     private final FilterPredicateType predicateType;

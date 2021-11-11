@@ -1,20 +1,19 @@
 package itmo.efarinov.soa.collectionmanager.repository;
 
+import itmo.efarinov.soa.collectionmanager.error.MaxPageNumberExceededException;
 import itmo.efarinov.soa.collectionmanager.filter.SortingOrder;
 import itmo.efarinov.soa.collectionmanager.utils.SessionFactoryBuilder;
 import itmo.efarinov.soa.collectionmanager.filter.FilterPredicate;
+import lombok.SneakyThrows;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 public class CommonCrudRepository<T> implements ICrudRepository<T> {
-    private final EntityManager em;
-    private final Class<T> runtimeClass;
+    protected final EntityManager em;
+    protected final Class<T> runtimeClass;
 
     public CommonCrudRepository(Class<T> runtimeClass) {
         this.runtimeClass = runtimeClass;
@@ -70,8 +69,14 @@ public class CommonCrudRepository<T> implements ICrudRepository<T> {
         return (List<T>) q.getResultList();
     }
 
+    @SneakyThrows
     @Override
     public List<T> getByFilter(List<FilterPredicate<?>> query, int pageSize, int page, SortingOrder sortingOrder) {
+
+        long totalEntities = countByFilter(query);
+        if (page * pageSize > totalEntities) {
+            throw new MaxPageNumberExceededException("'" + page * pageSize + "' is bigger then total amount of entities in db (" + totalEntities + ")");
+        }
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(runtimeClass);
@@ -83,9 +88,27 @@ public class CommonCrudRepository<T> implements ICrudRepository<T> {
         }
 
         Query q = em.createQuery(cq.select(root).where(predicates).orderBy(sortingOrder.toOrder(cb, root)));
+
         q.setFirstResult(pageSize * page);
         q.setMaxResults(pageSize);
 
         return (List<T>) q.getResultList();
+    }
+
+    @Override
+    public long countByFilter(List<FilterPredicate<?>> query) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<T> root = cq.from(runtimeClass);
+        Expression<Long> countExpr = cb.count(root);
+        Predicate[] predicates = new Predicate[query.size()];
+        for (int i = 0; i < query.size(); ++i) {
+            System.out.println("COUNTING " + query.get(i).toJson());
+            predicates[i] = query.get(i).getQueryFilterPredicate(cb, root);
+        }
+
+        Query q = em.createQuery(cq.select(countExpr).where(predicates));
+
+        return (long) q.getSingleResult();
     }
 }

@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class FilterDto extends CommonDto<FilterPredicate<String>> {
     private String fieldName;
     private String predicateType;

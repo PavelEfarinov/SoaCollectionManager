@@ -1,4 +1,4 @@
-package itmo.efarinov.soa.collectionmanager.servlet;
+package itmo.efarinov.soa.collectionmanager.servlet.crud;
 
 import itmo.efarinov.soa.collectionmanager.dto.WorkerDto;
 import itmo.efarinov.soa.collectionmanager.entity.CoordinatesEntity;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 @WebServlet("/workers/*")
-public class WorkerServlet extends CommonApplicationServlet<WorkerEntity, WorkerDto> {
+public class WorkerServlet extends CommonCrudServlet<WorkerEntity, WorkerDto> {
     private CommonCrudRepository<OrganizationEntity> organizationRepository;
     private CommonCrudRepository<CoordinatesEntity> coordinatesRepository;
 

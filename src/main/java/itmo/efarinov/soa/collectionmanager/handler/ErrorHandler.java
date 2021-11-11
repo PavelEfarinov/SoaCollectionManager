@@ -1,7 +1,9 @@
 package itmo.efarinov.soa.collectionmanager.handler;
 
 import itmo.efarinov.soa.collectionmanager.dto.ErrorDto;
+import itmo.efarinov.soa.collectionmanager.error.BadFilterException;
 import itmo.efarinov.soa.collectionmanager.error.BadRequestException;
+import itmo.efarinov.soa.collectionmanager.error.MaxPageNumberExceededException;
 import lombok.SneakyThrows;
 
 import javax.persistence.NoResultException;
@@ -10,9 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,9 +23,11 @@ public class ErrorHandler extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        handledErrors.put(NumberFormatException.class, HttpServletResponse.SC_BAD_REQUEST);
+        handledErrors.put(BadFilterException.class, HttpServletResponse.SC_BAD_REQUEST);
         handledErrors.put(NoResultException.class, HttpServletResponse.SC_NOT_FOUND);
+        handledErrors.put(MaxPageNumberExceededException.class, HttpServletResponse.SC_BAD_REQUEST);
         handledErrors.put(BadRequestException.class, HttpServletResponse.SC_BAD_REQUEST);
+        handledErrors.put(NoSuchFieldException.class, HttpServletResponse.SC_BAD_REQUEST);
     }
 
     @SneakyThrows
@@ -64,7 +66,6 @@ public class ErrorHandler extends HttpServlet {
     protected void processError(
             HttpServletRequest req,
             HttpServletResponse resp) {
-        System.out.println("HANDLER INVOKED");
         resp.setContentType("application/json; charset=utf-8");
         try (PrintWriter writer = resp.getWriter()) {
             Throwable exception = (Throwable) req.getAttribute("javax.servlet.error.exception");
@@ -72,7 +73,6 @@ public class ErrorHandler extends HttpServlet {
             if (handledErrors.containsKey(exception.getClass())) {
                 resp.setStatus(handledErrors.get(exception.getClass()));
             }
-
             writer.write(ErrorDto
                     .builder()
                     .Error(exception.getClass().getSimpleName())
