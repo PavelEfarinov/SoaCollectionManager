@@ -25,10 +25,10 @@ public class WorkerEntity extends CommonEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private CoordinatesEntity coordinates; //Поле не может быть null
-    @NotNull
+//    @NotNull
     @CreationTimestamp
     private java.time.LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    @Min(0)
+    @Min(value = 0)
     private float salary; //Значение поля должно быть больше 0
     @NotNull
     private java.time.LocalDateTime startDate; //Поле не может быть null

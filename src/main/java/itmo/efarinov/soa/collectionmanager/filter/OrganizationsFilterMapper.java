@@ -2,6 +2,7 @@ package itmo.efarinov.soa.collectionmanager.filter;
 
 import itmo.efarinov.soa.collectionmanager.dto.FilterDto;
 import itmo.efarinov.soa.collectionmanager.entity.OrganizationEntity;
+import itmo.efarinov.soa.collectionmanager.error.BadFilterException;
 import lombok.SneakyThrows;
 
 public class OrganizationsFilterMapper implements CommonEntityFilterMapper<OrganizationEntity> {
@@ -16,7 +17,11 @@ public class OrganizationsFilterMapper implements CommonEntityFilterMapper<Organ
         switch (dto.getFieldName()) {
             case "id":
             case "annualTurnover":
-                return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), Integer.parseInt(dto.getFieldValue()));
+                try {
+                    return new FilterPredicate<>(dto.getFieldName(), dto.getPredicateAsType(), Integer.parseInt(dto.getFieldValue()));
+                } catch (NumberFormatException e) {
+                    throw new BadFilterException(dto.getFieldName() + " should be an int. Filter: '" + dto + "'");
+                }
             case "fullName":
                 return dto.toModel();
             default:

@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
+import javax.validation.Valid;
 import java.util.List;
 
 public class CommonCrudRepository<T> implements ICrudRepository<T> {
@@ -21,14 +22,14 @@ public class CommonCrudRepository<T> implements ICrudRepository<T> {
     }
 
     @Override
-    public void save(T worker) {
+    public void save(@Valid T worker) {
         em.getTransaction().begin();
         em.persist(worker);
         em.getTransaction().commit();
     }
 
     @Override
-    public void update(T worker) {
+    public void update(@Valid T worker) {
         em.getTransaction().begin();
         em.merge(worker);
         em.getTransaction().commit();

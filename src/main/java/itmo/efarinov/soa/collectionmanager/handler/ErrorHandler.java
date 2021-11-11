@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,7 @@ public class ErrorHandler extends HttpServlet {
         handledErrors.put(MaxPageNumberExceededException.class, HttpServletResponse.SC_BAD_REQUEST);
         handledErrors.put(BadRequestException.class, HttpServletResponse.SC_BAD_REQUEST);
         handledErrors.put(NoSuchFieldException.class, HttpServletResponse.SC_BAD_REQUEST);
+        handledErrors.put(ConstraintViolationException.class, HttpServletResponse.SC_BAD_REQUEST);
     }
 
     @SneakyThrows
@@ -73,13 +76,29 @@ public class ErrorHandler extends HttpServlet {
             if (handledErrors.containsKey(exception.getClass())) {
                 resp.setStatus(handledErrors.get(exception.getClass()));
             }
-            writer.write(ErrorDto
-                    .builder()
-                    .Error(exception.getClass().getSimpleName())
-                    .Message(exception.getMessage())
-                    .build().toJson());
+            if (exception.getClass().equals(ConstraintViolationException.class)) {
+                ConstraintViolationException ex = (ConstraintViolationException) exception;
+
+                StringBuilder commonErrorMessage = new StringBuilder();
+
+                for (ConstraintViolation<?> constraint : ex.getConstraintViolations()) {
+                    commonErrorMessage.append(constraint.getPropertyPath()).append(" ").append(constraint.getMessage()).append("\n");
+                }
+
+                writer.write(ErrorDto
+                        .builder()
+                        .Error(ex.getClass().getSimpleName())
+                        .Message(commonErrorMessage.toString())
+                        .build().toJson());
+
+            } else {
+                writer.write(ErrorDto
+                        .builder()
+                        .Error(exception.getClass().getSimpleName())
+                        .Message(exception.getMessage())
+                        .build().toJson());
+
+            }
         }
     }
-
-
 }
