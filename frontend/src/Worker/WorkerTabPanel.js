@@ -47,7 +47,7 @@ export default function WorkerTabPanel() {
     }, [enqueueSnackbar]);
 
     const updateDataGrid = useCallback(() => {
-        axios.get('/workers/salary/sum').then(function (response) {
+        axios.get('/api/workers/salary/sum').then(function (response) {
             console.log(response.data);
             setSalarySum(response.data);
             setIsSalaryLoaded(true);
@@ -57,7 +57,7 @@ export default function WorkerTabPanel() {
                 setIsSalaryLoaded(true);
             });
 
-        axios.get('/workers/count')
+        axios.get('/api/workers/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);
@@ -68,7 +68,7 @@ export default function WorkerTabPanel() {
                 setIsTotalLoaded(true);
             });
 
-        return axios.get('/workers', {
+        return axios.get('/api/workers', {
             params: {
                 page: page,
                 pageSize: pageSize,
@@ -100,7 +100,7 @@ export default function WorkerTabPanel() {
             return {fieldName: filter.field, predicateType: filter.predicate, fieldValue: filter.value};
         });
 
-        axios.get('/workers/salary/sum').then(function (response) {
+        axios.get('/api/workers/salary/sum').then(function (response) {
             console.log(response.data);
             setSalarySum(response.data);
             setIsSalaryLoaded(true);
@@ -110,7 +110,7 @@ export default function WorkerTabPanel() {
                 setIsSalaryLoaded(true);
             });
 
-        axios.get('/workers/count')
+        axios.get('/api/workers/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);
@@ -123,7 +123,7 @@ export default function WorkerTabPanel() {
 
         return axios({
             method: 'get',
-            url: '/workers',
+            url: '/api/workers',
             responseType: 'json',
             params: {
                 filters: JSON.stringify(params),
@@ -156,7 +156,7 @@ export default function WorkerTabPanel() {
             updateDataGrid();
         }
 
-        axios.get('/workers/salary/sum').then(function (response) {
+        axios.get('/api/workers/salary/sum').then(function (response) {
             console.log(response.data);
             setSalarySum(response.data);
             setIsSalaryLoaded(true);
@@ -166,7 +166,7 @@ export default function WorkerTabPanel() {
                 setIsSalaryLoaded(true);
             });
 
-        axios.get('/workers/count')
+        axios.get('/api/workers/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);

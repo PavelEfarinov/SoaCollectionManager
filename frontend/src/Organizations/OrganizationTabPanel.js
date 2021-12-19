@@ -45,7 +45,7 @@ export default function OrganizationTabPanel() {
     }, [enqueueSnackbar]);
 
     const updateDataGrid = useCallback(() => {
-        return axios.get('/organizations', {
+        return axios.get('/api/organizations', {
             params: {
                 page: page,
                 pageSize: pageSize,
@@ -77,7 +77,7 @@ export default function OrganizationTabPanel() {
             return {fieldName: filter.field, predicateType: filter.predicate, fieldValue: filter.value};
         });
 
-        axios.get('/organizations/count')
+        axios.get('/api/organizations/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);
@@ -90,7 +90,7 @@ export default function OrganizationTabPanel() {
 
         return axios({
             method: 'get',
-            url: '/organizations',
+            url: '/api/organizations',
             responseType: 'json',
             params: {
                 filters: JSON.stringify(params),
@@ -123,7 +123,7 @@ export default function OrganizationTabPanel() {
             updateDataGrid();
         }
 
-        axios.get('/organizations/count')
+        axios.get('/api/organizations/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);

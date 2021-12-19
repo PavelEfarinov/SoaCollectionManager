@@ -25,7 +25,7 @@ export default function CreateWorkerDialog(props) {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        axios.get('/organizations?pageSize=1000').then(function (response) {
+        axios.get('/api/organizations?pageSize=1000').then(function (response) {
             console.log(response.data);
             setOrganizations(response.data);
         })
@@ -33,7 +33,7 @@ export default function CreateWorkerDialog(props) {
                 props.setProperError(requestError);
             });
 
-        axios.get('/coordinates?pageSize=1000')
+        axios.get('/api/coordinates?pageSize=1000')
             .then(function (response) {
                 console.log(response.data);
                 setCoordinates(response.data);
@@ -76,7 +76,7 @@ export default function CreateWorkerDialog(props) {
                 workerDto.endDate = worker.endDate;
             }
             setSubmitting(true);
-            axios.post('/workers', workerDto)
+            axios.post('/api/workers', workerDto)
                 .then(function (response) {
                     props.handleClose();
                     setSubmitting(false);

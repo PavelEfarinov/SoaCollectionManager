@@ -54,4 +54,11 @@ public class WorkerServlet extends CommonCrudServlet<WorkerEntity, WorkerDto> {
         entityRepository.update(worker);
         return Response.ok().entity(worker).build();
     }
+
+    @GET
+    @Path("/salary/sum")
+    public Response doGet() {
+        return Response.ok().entity(((WorkerRepository) entityRepository).countSalarySum()).build();
+    }
+
 }

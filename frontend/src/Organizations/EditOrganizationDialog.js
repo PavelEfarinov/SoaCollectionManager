@@ -16,7 +16,7 @@ export default function EditOrganizationDialog(props) {
 
     const deleteOrganization = useCallback(() => {
         setSubmitting(true);
-        axios.delete('/organizations/' + organization.id)
+        axios.delete('/api/organizations/' + organization.id)
             .then(function (response) {
                 props.handleClose();
                 setSubmitting(false);
@@ -43,7 +43,7 @@ export default function EditOrganizationDialog(props) {
             };
 
             setSubmitting(true);
-            axios.put('/organizations/' + organization.id, organizationDto)
+            axios.put('/api/organizations/' + organization.id, organizationDto)
                 .then(function (response) {
                     props.handleClose();
                     setSubmitting(false);

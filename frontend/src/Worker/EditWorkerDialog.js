@@ -36,7 +36,7 @@ export default function EditWorkerDialog(props) {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        axios.get('/organizations?pageSize=1000').then(function (response) {
+        axios.get('/api/organizations?pageSize=1000').then(function (response) {
             console.log(response.data);
             setOrganizations(response.data);
         })
@@ -44,7 +44,7 @@ export default function EditWorkerDialog(props) {
                 props.setProperError(requestError);
             });
 
-        axios.get('/coordinates?pageSize=1000')
+        axios.get('/api/coordinates?pageSize=1000')
             .then(function (response) {
                 console.log(response.data);
                 setCoordinates(response.data);
@@ -56,7 +56,7 @@ export default function EditWorkerDialog(props) {
 
     const deleteWorker = useCallback(() => {
         setSubmitting(true);
-        axios.delete('/workers/' + worker.id)
+        axios.delete('/api/workers/' + worker.id)
             .then(function (response) {
                 props.handleClose();
                 setSubmitting(false);
@@ -100,7 +100,7 @@ export default function EditWorkerDialog(props) {
                 workerDto.endDate = worker.endDate;
             }
             setSubmitting(true);
-            axios.put('/workers/' + worker.id, workerDto)
+            axios.put('/api/workers/' + worker.id, workerDto)
                 .then(function (response) {
                     props.handleClose();
                     setSubmitting(false);

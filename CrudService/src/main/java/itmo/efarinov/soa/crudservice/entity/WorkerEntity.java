@@ -1,5 +1,6 @@
 package itmo.efarinov.soa.crudservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import itmo.efarinov.soa.dto.WorkerDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

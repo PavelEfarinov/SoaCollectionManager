@@ -87,8 +87,8 @@ public class ErrorHandler extends HttpServlet {
                     if(ex.getCause().getCause().getMessage().contains(" is still referenced"))
                     writer.write(ErrorDto
                             .builder()
-                            .Error(ex.getClass().getSimpleName())
-                            .Message(ex.getCause().getCause().getMessage() + "You should consider removing dependent objects first.")
+                            .error(ex.getClass().getSimpleName())
+                            .message(ex.getCause().getCause().getMessage() + "You should consider removing dependent objects first.")
                             .build().toJson());
                 }
             }
@@ -102,15 +102,15 @@ public class ErrorHandler extends HttpServlet {
 
                 writer.write(ErrorDto
                         .builder()
-                        .Error(ex.getClass().getSimpleName())
-                        .Message(commonErrorMessage.toString())
+                        .error(ex.getClass().getSimpleName())
+                        .message(commonErrorMessage.toString())
                         .build().toJson());
 
             } else {
                 writer.write(ErrorDto
                         .builder()
-                        .Error(exception.getClass().getSimpleName())
-                        .Message(exception.getMessage())
+                        .error(exception.getClass().getSimpleName())
+                        .message(exception.getMessage())
                         .build().toJson());
             }
         }
