@@ -26,7 +26,7 @@ export default function CreateCoordinatesDialog(props) {
             };
 
             setSubmitting(true);
-            axios.post('/api/coordinates', coordinatesDto)
+            axios.post('/app/api/coordinates', coordinatesDto)
                 .then(function (response) {
                     props.handleClose();
                     setSubmitting(false);

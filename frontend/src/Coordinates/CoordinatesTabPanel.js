@@ -45,7 +45,7 @@ export default function CoordinatesTabPanel() {
     }, [enqueueSnackbar]);
 
     const updateDataGrid = useCallback(() => {
-        axios.get('/api/coordinates/count')
+        axios.get('/app/api/coordinates/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);
@@ -55,7 +55,7 @@ export default function CoordinatesTabPanel() {
                 setProperError(requestError);
                 setIsTotalLoaded(true);
             });
-        return axios.get('/api/coordinates', {
+        return axios.get('/app/api/coordinates', {
             params: {
                 page: page,
                 pageSize: pageSize,
@@ -87,7 +87,7 @@ export default function CoordinatesTabPanel() {
             return {fieldName: filter.field, predicateType: filter.predicate, fieldValue: filter.value};
         });
 
-        axios.get('/api/coordinates/count')
+        axios.get('/app/api/coordinates/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);
@@ -100,7 +100,7 @@ export default function CoordinatesTabPanel() {
 
         return axios({
             method: 'get',
-            url: '/api/coordinates',
+            url: '/app/api/coordinates',
             responseType: 'json',
             params: {
                 filters: JSON.stringify(params),
@@ -133,7 +133,7 @@ export default function CoordinatesTabPanel() {
             updateDataGrid();
         }
 
-        axios.get('/api/coordinates/count')
+        axios.get('/app/api/coordinates/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);

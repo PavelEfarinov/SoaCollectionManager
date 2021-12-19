@@ -12,7 +12,7 @@ export default function EditCoordinatesDialog(props) {
 
     const deleteOrganization = useCallback(() => {
         setSubmitting(true);
-        axios.delete('/api/coordinates/' + coordinates.id)
+        axios.delete('/app/api/coordinates/' + coordinates.id)
             .then(function (response) {
                 props.handleClose();
                 setSubmitting(false);
@@ -39,7 +39,7 @@ export default function EditCoordinatesDialog(props) {
             };
 
             setSubmitting(true);
-            axios.put('/api/coordinates/' + coordinates.id, coordinatesDto)
+            axios.put('/app/api/coordinates/' + coordinates.id, coordinatesDto)
                 .then(function (response) {
                     props.handleClose();
                     setSubmitting(false);

@@ -104,7 +104,9 @@ public class HrController {
                     .startDate(worker.startDate)
                     .build();
 
-            workerFacade.updateById(worker.id, withNewSalary);
+            float newSalary = workerFacade.updateById(worker.id, withNewSalary).salary;
+            return Response.ok().entity(newSalary).build();
+
         } catch (NestedRequestException e) {
             return Response.status(400)
                     .entity(
@@ -114,6 +116,5 @@ public class HrController {
                                     .build()
                     ).build();
         }
-        return Response.ok().build();
     }
 }

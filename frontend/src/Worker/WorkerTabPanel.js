@@ -26,17 +26,22 @@ export default function WorkerTabPanel() {
     const [sortOrder, setSortOrder] = useState({field: 'id', order: 'ASC'});
 
     const updateSelectedItem = useCallback((selectionModel: GridSelectionModel, details: GridCallbackDetails) => {
-        const newSelected = items.find(function (e) {
-            return e.id === selectionModel[0]
-        })
-        setSelectedItem(newSelected)
-    }, [items, setSelectedItem])
+        if(isGridLoaded) {
+            const newSelected = items.find(function (e) {
+                return e.id === selectionModel[0]
+            })
+            setSelectedItem(newSelected)
+        }
+        else {
+            setSelectedItem(null)
+        }
+    }, [items, setSelectedItem, isGridLoaded])
 
     const setProperError = useCallback((requestError) => {
         var newError = requestError;
         if (requestError) {
             if (requestError.response) {
-                newError = requestError.response.data.Message;
+                newError = requestError.response.data.message;
             } else if (requestError.request) {
                 newError = requestError.request
             } else {
@@ -47,7 +52,7 @@ export default function WorkerTabPanel() {
     }, [enqueueSnackbar]);
 
     const updateDataGrid = useCallback(() => {
-        axios.get('/api/workers/salary/sum').then(function (response) {
+        axios.get('/app/api/workers/salary/sum').then(function (response) {
             console.log(response.data);
             setSalarySum(response.data);
             setIsSalaryLoaded(true);
@@ -57,7 +62,7 @@ export default function WorkerTabPanel() {
                 setIsSalaryLoaded(true);
             });
 
-        axios.get('/api/workers/count')
+        axios.get('/app/api/workers/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);
@@ -68,7 +73,7 @@ export default function WorkerTabPanel() {
                 setIsTotalLoaded(true);
             });
 
-        return axios.get('/api/workers', {
+        axios.get('/app/api/workers', {
             params: {
                 page: page,
                 pageSize: pageSize,
@@ -100,7 +105,7 @@ export default function WorkerTabPanel() {
             return {fieldName: filter.field, predicateType: filter.predicate, fieldValue: filter.value};
         });
 
-        axios.get('/api/workers/salary/sum').then(function (response) {
+        axios.get('/app/api/workers/salary/sum').then(function (response) {
             console.log(response.data);
             setSalarySum(response.data);
             setIsSalaryLoaded(true);
@@ -110,7 +115,7 @@ export default function WorkerTabPanel() {
                 setIsSalaryLoaded(true);
             });
 
-        axios.get('/api/workers/count')
+        axios.get('/app/api/workers/count')
             .then(function (response) {
                 console.log(response.data);
                 setTotalForFilter(response.data);
@@ -123,7 +128,7 @@ export default function WorkerTabPanel() {
 
         return axios({
             method: 'get',
-            url: '/api/workers',
+            url: '/app/api/workers',
             responseType: 'json',
             params: {
                 filters: JSON.stringify(params),
@@ -155,28 +160,7 @@ export default function WorkerTabPanel() {
         if (items.length === 0) {
             updateDataGrid();
         }
-
-        axios.get('/api/workers/salary/sum').then(function (response) {
-            console.log(response.data);
-            setSalarySum(response.data);
-            setIsSalaryLoaded(true);
-        })
-            .catch(function (requestError) {
-                setProperError(requestError);
-                setIsSalaryLoaded(true);
-            });
-
-        axios.get('/api/workers/count')
-            .then(function (response) {
-                console.log(response.data);
-                setTotalForFilter(response.data);
-                setIsTotalLoaded(true);
-            })
-            .catch(function (requestError) {
-                setProperError(requestError);
-                setIsTotalLoaded(true);
-            });
-    }, [])
+    }, [items.length, updateDataGrid])
 
     const columns: GridColDef[] = [
         {field: 'id', headerName: 'Id', width: 50, sortable: false},

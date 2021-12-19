@@ -26,7 +26,7 @@ export default function CreateOrganizationDialog(props) {
             };
 
             setSubmitting(true);
-            axios.post('/api/organizations', organizationDto)
+            axios.post('/app/api/organizations', organizationDto)
                 .then(function (response) {
                     props.handleClose();
                     setSubmitting(false);

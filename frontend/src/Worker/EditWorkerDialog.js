@@ -7,6 +7,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Grid,
     TextField,
     Typography
 } from '@mui/material';
@@ -15,11 +16,13 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import axios from 'axios'
 import dayjz from 'dayjs';
 import workerImg from './worker.jpg';
+import NumberInput from "../NumberInput";
 
 export default function EditWorkerDialog(props) {
     const positions = ['DIRECTOR', 'HEAD_OF_DIVISION', 'HEAD_OF_DEPARTMENT', 'LEAD_DEVELOPER', 'BAKER'];
-
+    const [oldOrganizationId, setOldOrganizationId] = useState(props.item.organization ? JSON.parse(props.item.organization).id : null);
     const [organizations, setOrganizations] = useState([]);
+    const [index, setIndex] = useState(1.0);
     const [coordinates, setCoordinates] = useState([]);
     const [worker, setWorker] = useState({
         id: props.item.id,
@@ -36,7 +39,7 @@ export default function EditWorkerDialog(props) {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        axios.get('/api/organizations?pageSize=1000').then(function (response) {
+        axios.get('/app/api/organizations?pageSize=1000').then(function (response) {
             console.log(response.data);
             setOrganizations(response.data);
         })
@@ -44,7 +47,7 @@ export default function EditWorkerDialog(props) {
                 props.setProperError(requestError);
             });
 
-        axios.get('/api/coordinates?pageSize=1000')
+        axios.get('/app/api/coordinates?pageSize=1000')
             .then(function (response) {
                 console.log(response.data);
                 setCoordinates(response.data);
@@ -56,7 +59,7 @@ export default function EditWorkerDialog(props) {
 
     const deleteWorker = useCallback(() => {
         setSubmitting(true);
-        axios.delete('/api/workers/' + worker.id)
+        axios.delete('/app/api/workers/' + worker.id)
             .then(function (response) {
                 props.handleClose();
                 setSubmitting(false);
@@ -66,6 +69,35 @@ export default function EditWorkerDialog(props) {
                 setSubmitting(false);
             })
     }, [worker, props])
+
+    const updateOnlyOrg = useCallback((newOrg) => {
+        setSubmitting(true);
+        axios.post(`/hr/api/move/${worker.id}/${oldOrganizationId}/${newOrg.id}`)
+            .then(function (response) {
+                setOldOrganizationId(newOrg.id)
+                worker.organization = newOrg;
+                setWorker(Object.assign({}, worker));
+                setSubmitting(false);
+            })
+            .catch(function (requestError) {
+                props.setProperError(requestError);
+                setSubmitting(false);
+            })
+    }, [worker, oldOrganizationId, props])
+
+    const updateOnlySalary = useCallback(() => {
+        setSubmitting(true);
+        axios.post(`/hr/api/index/${worker.id}/${index}`)
+            .then(function (response) {
+                worker.salary = response.data;
+                setWorker(Object.assign({}, worker));
+                setSubmitting(false);
+            })
+            .catch(function (requestError) {
+                props.setProperError(requestError);
+                setSubmitting(false);
+            })
+    }, [worker, index, props])
 
     const validateWorkerOnSubmit = useCallback(() => {
         var newErrors = {};
@@ -100,7 +132,7 @@ export default function EditWorkerDialog(props) {
                 workerDto.endDate = worker.endDate;
             }
             setSubmitting(true);
-            axios.put('/api/workers/' + worker.id, workerDto)
+            axios.put('/app/api/workers/' + worker.id, workerDto)
                 .then(function (response) {
                     props.handleClose();
                     setSubmitting(false);
@@ -114,17 +146,18 @@ export default function EditWorkerDialog(props) {
         setErrors(newErrors);
     }, [worker, props, setSubmitting])
 
-    return (
-        <div>
-            <Dialog open={props.open} onClose={props.handleClose} maxWidth='xl'>
-                <DialogTitle>Update worker</DialogTitle>
-                <DialogContent>
-                    <Box display="grid" gap={2} sx={{
-                        backgroundImage: `linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${workerImg})`,
-                        backgroundSize: 'contain',
-                        backgroundPosition: 'center'
-                    }}>
-                        <Typography>
+    if(props.item != null) {
+        return (
+            <div>
+                <Dialog open={props.open} onClose={props.handleClose} maxWidth='xl'>
+                    <DialogTitle>Update worker</DialogTitle>
+                    <DialogContent>
+                        <Box display="grid" gap={2} sx={{
+                            backgroundImage: `linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${workerImg})`,
+                            backgroundSize: 'contain',
+                            backgroundPosition: 'center'
+                        }}>
+                            <Typography>
               <pre style={{fontFamily: 'inherit'}}>
                 {`public class Worker {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
@@ -138,89 +171,115 @@ export default function EditWorkerDialog(props) {
     private Organization organization; //Поле может быть null
 }`}
               </pre>
-                        </Typography>
-                        <Typography>
-                            <b>Please, fill the fields according to the description to create new worker entity.</b>
-                        </Typography>
-                        {
-                            coordinates.length > 0 && organizations.length > 0 ? <Box display="grid" gap={2}>
-                                <TextField size='small' label='Name' value={worker.name} onChange={(e) => {
-                                    worker.name = e.target.value;
-                                    setWorker(Object.assign({}, worker));
-                                }} {...(errors['Name'] && {error: true, helperText: errors['Name']})}/>
-                                <TextField size='small' label='Salary' value={worker.salary} onChange={(e) => {
-                                    worker.salary = e.target.value;
-                                    setWorker(Object.assign({}, worker));
-                                }} {...(errors['Salary'] && {error: true, helperText: errors['Salary']})}/>
-                                <Autocomplete value={worker.position} onChange={(e, value) => {
-                                    worker.position = value;
-                                    setWorker(Object.assign({}, worker));
-                                }} options={positions} renderInput={(params) => <TextField {...params} label='Position'
-                                                                                           size='small' {...(errors['Position'] && {
-                                    error: true,
-                                    helperText: errors['Position']
-                                })}/>}/>
-                                <Autocomplete value={worker.coordinates} onChange={(e, value) => {
-                                    worker.coordinates = value;
-                                    setWorker(Object.assign({}, worker));
-                                }} options={coordinates} getOptionLabel={(option) => {
-                                    return JSON.stringify(option)
-                                }} renderInput={(params) => <TextField {...params} label='Coordinates'
-                                                                       size='small' {...(errors['Coordinates'] && {
-                                    error: true,
-                                    helperText: errors['Coordinates']
-                                })}/>}/>
-                                <Autocomplete value={worker.organization} onChange={(e, value) => {
-                                    worker.organization = value;
-                                    setWorker(Object.assign({}, worker));
-                                }} options={organizations} getOptionLabel={(option) => {
-                                    return option.fullName + '_' + option.id
-                                }} renderInput={(params) => <TextField {...params} label='Organization'
-                                                                       size='small'/>}/>
-                                <DateTimePicker
-                                    renderInput={(props) => <TextField {...props}
-                                                                       size='small' {...(errors['StartDate'] && {
+                            </Typography>
+                            <Typography>
+                                <b>Please, fill the fields according to the description to create new worker entity.</b>
+                            </Typography>
+                            {
+                                coordinates.length > 0 && organizations.length > 0 ? <Box display="grid" gap={2}>
+                                    <TextField size='small' label='Name' value={worker.name} onChange={(e) => {
+                                        worker.name = e.target.value;
+                                        setWorker(Object.assign({}, worker));
+                                    }} {...(errors['Name'] && {error: true, helperText: errors['Name']})}/>
+                                    <Grid container spacing={1}>
+                                        <Grid item xl={5}>
+                                            <TextField size='small' label='Salary' value={worker.salary}
+                                                       onChange={(e) => {
+                                                           worker.salary = e.target.value;
+                                                           setWorker(Object.assign({}, worker));
+                                                       }} {...(errors['Salary'] && {
+                                                error: true,
+                                                helperText: errors['Salary']
+                                            })}/>
+                                        </Grid>
+                                        <Grid item xl={5}>
+                                            <NumberInput xl={5} size='small' label='Index' value={index}
+                                                         onChange={(e) => {
+                                                             setIndex(e.target.value)
+                                                         }}/>
+                                        </Grid>
+                                        <Grid item xl={1}>
+                                            <Button xl={2} onClick={updateOnlySalary}>Update</Button>
+                                        </Grid>
+                                    </Grid>
+                                    <Autocomplete value={worker.position} onChange={(e, value) => {
+                                        worker.position = value;
+                                        setWorker(Object.assign({}, worker));
+                                    }} options={positions}
+                                                  renderInput={(params) => <TextField {...params} label='Position'
+                                                                                      size='small' {...(errors['Position'] && {
+                                                      error: true,
+                                                      helperText: errors['Position']
+                                                  })}/>}/>
+                                    <Autocomplete value={worker.coordinates} onChange={(e, value) => {
+                                        worker.coordinates = value;
+                                        setWorker(Object.assign({}, worker));
+                                    }} options={coordinates} getOptionLabel={(option) => {
+                                        return JSON.stringify(option)
+                                    }} renderInput={(params) => <TextField {...params} label='Coordinates'
+                                                                           size='small' {...(errors['Coordinates'] && {
                                         error: true,
-                                        helperText: errors['StartDate']
-                                    })}/>}
-                                    label="Start date"
-                                    value={worker.startDate}
-                                    onChange={(newValue) => {
-                                        worker.startDate = newValue;
-                                        setWorker(Object.assign({}, worker));
-                                    }}
-                                />
-                                <DateTimePicker
-                                    renderInput={(props) => <TextField {...props} size='small'/>}
-                                    label="End date"
-                                    value={worker.endDate}
-                                    onChange={(newValue) => {
-                                        worker.endDate = newValue;
-                                        setWorker(Object.assign({}, worker));
-                                    }}
-                                />
-                            </Box> : ''
-                        }
-                    </Box>
-                </DialogContent>
-                {
-                    submitting ? <DialogActions>
-                        <LoadingButton color='secondary'>Cancel</LoadingButton>
-                        <LoadingButton>Update</LoadingButton>
-                    </DialogActions> : <DialogActions>
-                        <Button onClick={() => {
-                            setWorker({position: null, startDate: null, endDate: null});
-                            props.handleClose()
-                        }} variant='contained' color='secondary'>Cancel</Button>
-                        <Button onClick={() => {
-                            deleteWorker();
-                        }} color='error'>Delete</Button>
-                        <Button onClick={() => {
-                            validateWorkerOnSubmit();
-                        }}>Update</Button>
-                    </DialogActions>
-                }
-            </Dialog>
-        </div>
-    );
+                                        helperText: errors['Coordinates']
+                                    })}/>}/>
+                                    <Autocomplete value={worker.organization} onChange={(e, value) => {
+                                        if (oldOrganizationId) {
+                                            updateOnlyOrg(value);
+                                        } else {
+                                            worker.organization = value;
+                                            setWorker(Object.assign({}, worker));
+                                        }
+                                    }} options={organizations} getOptionLabel={(option) => {
+                                        return option.fullName + '_' + option.id
+                                    }} renderInput={(params) => <TextField {...params} label='Organization'
+                                                                           size='small'/>}/>
+                                    <DateTimePicker
+                                        renderInput={(props) => <TextField {...props}
+                                                                           size='small' {...(errors['StartDate'] && {
+                                            error: true,
+                                            helperText: errors['StartDate']
+                                        })}/>}
+                                        label="Start date"
+                                        value={worker.startDate}
+                                        onChange={(newValue) => {
+                                            worker.startDate = newValue;
+                                            setWorker(Object.assign({}, worker));
+                                        }}
+                                    />
+                                    <DateTimePicker
+                                        renderInput={(props) => <TextField {...props} size='small'/>}
+                                        label="End date"
+                                        value={worker.endDate}
+                                        onChange={(newValue) => {
+                                            worker.endDate = newValue;
+                                            setWorker(Object.assign({}, worker));
+                                        }}
+                                    />
+                                </Box> : ''
+                            }
+                        </Box>
+                    </DialogContent>
+                    {
+                        submitting ? <DialogActions>
+                            <LoadingButton color='secondary'>Cancel</LoadingButton>
+                            <LoadingButton>Update</LoadingButton>
+                        </DialogActions> : <DialogActions>
+                            <Button onClick={() => {
+                                setWorker({position: null, startDate: null, endDate: null});
+                                props.handleClose()
+                            }} variant='contained' color='secondary'>Cancel</Button>
+                            <Button onClick={() => {
+                                deleteWorker();
+                            }} color='error'>Delete</Button>
+                            <Button onClick={() => {
+                                validateWorkerOnSubmit();
+                            }}>Update</Button>
+                        </DialogActions>
+                    }
+                </Dialog>
+            </div>
+        );
+    }
+    else {
+        return <div></div>
+    }
 }

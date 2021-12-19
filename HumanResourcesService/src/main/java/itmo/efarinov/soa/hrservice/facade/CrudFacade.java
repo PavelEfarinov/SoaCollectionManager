@@ -39,13 +39,14 @@ public abstract class CrudFacade<T, DT> {
         return response.readEntity(runtimeClass);
     }
 
-    public void updateById(int id, DT newEntity) throws NestedRequestException {
+    public T updateById(int id, DT newEntity) throws NestedRequestException {
         WebTarget wt = getEntityTarget();
         Response response = wt.path(id + "").request(MediaType.APPLICATION_JSON).put(Entity.json(newEntity));
         if(hasError(response))
         {
             throw new NestedRequestException(response.readEntity(ErrorDto.class).message);
         }
+        return response.readEntity(runtimeClass);
     }
 
     protected boolean hasError(Response response) {

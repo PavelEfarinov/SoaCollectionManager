@@ -7,7 +7,6 @@ import CoordinatesTabPanel from './Coordinates/CoordinatesTabPanel.js';
 import axios from 'axios'
 import queryString from 'query-string'
 
-axios.defaults.baseURL = '/app'
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
     // Serialize the parameteters
