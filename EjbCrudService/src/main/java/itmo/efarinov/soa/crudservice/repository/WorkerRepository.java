@@ -1,10 +1,9 @@
 package itmo.efarinov.soa.crudservice.repository;
 
 import itmo.efarinov.soa.crudservice.entity.WorkerEntity;
+import itmo.efarinov.soa.crudservice.interfaces.repository.IWorkerRepository;
 import jakarta.ejb.LocalBean;
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Named;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -13,12 +12,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @Stateless
-@LocalBean
-public class WorkerRepository extends CommonCrudRepository<WorkerEntity> {
+public class WorkerRepository extends CommonCrudRepository<WorkerEntity> implements IWorkerRepository {
     public WorkerRepository() {
         super(WorkerEntity.class);
     }
 
+    @Override
     public float countSalarySum() {
         EntityManager em = getEm();
 

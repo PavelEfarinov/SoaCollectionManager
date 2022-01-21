@@ -1,13 +1,15 @@
 package itmo.efarinov.soa.crudservice.controller.crud;
 
 import itmo.efarinov.soa.crudservice.entity.WorkerEntity;
-import itmo.efarinov.soa.crudservice.filter.WorkerFilterMapper;
-import itmo.efarinov.soa.crudservice.mapper.WorkerEntityMapper;
-import itmo.efarinov.soa.crudservice.repository.CoordinatesRepository;
-import itmo.efarinov.soa.crudservice.repository.OrganizationRepository;
+import itmo.efarinov.soa.crudservice.interfaces.filter.IWorkerFilterMapper;
+import itmo.efarinov.soa.crudservice.interfaces.mapper.IWorkerMapper;
+import itmo.efarinov.soa.crudservice.interfaces.repository.ICoordinatesRepository;
+import itmo.efarinov.soa.crudservice.interfaces.repository.IOrganizationRepository;
+import itmo.efarinov.soa.crudservice.interfaces.repository.IWorkerRepository;
 import itmo.efarinov.soa.crudservice.repository.WorkerRepository;
 import itmo.efarinov.soa.dto.WorkerDto;
-import jakarta.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -16,19 +18,26 @@ import lombok.SneakyThrows;
 import javax.validation.Valid;
 
 @Path("/workers/")
-public class WorkerController extends CommonCrudController<WorkerEntity, WorkerDto> {
-    @Inject
+public class WorkerController extends CommonCrudController<
+        WorkerEntity,
+        WorkerDto,
+        IWorkerRepository,
+        IWorkerMapper,
+        IWorkerFilterMapper> {
+    @EJB
+    private IOrganizationRepository organizationRepository;
+    @EJB
+    private ICoordinatesRepository coordinatesRepository;
+    @EJB
+    private IWorkerRepository repository;
+    @EJB
+    private IWorkerMapper mapper;
+    @EJB
+    private IWorkerFilterMapper filterMapper;
 
-    private OrganizationRepository organizationRepository;
-    @Inject
-
-    private CoordinatesRepository coordinatesRepository;
-
-    @Inject
-    public WorkerController(WorkerFilterMapper filterMapper,
-                            WorkerRepository workerRepository,
-                            WorkerEntityMapper workerEntityMapper) {
-        super(filterMapper, workerRepository, workerEntityMapper);
+    @PostConstruct
+    public void init() {
+        super.init(repository, mapper, filterMapper);
     }
 
     @POST
@@ -63,7 +72,7 @@ public class WorkerController extends CommonCrudController<WorkerEntity, WorkerD
     @GET
     @Path("/salary/sum")
     public Response doGet() {
-        return Response.ok().entity(((WorkerRepository) entityRepository).countSalarySum()).build();
+        return Response.ok().entity(repository.countSalarySum()).build();
     }
 
 }

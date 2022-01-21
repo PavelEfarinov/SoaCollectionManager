@@ -1,13 +1,12 @@
 package itmo.efarinov.soa.crudservice.mapper;
 
 import itmo.efarinov.soa.crudservice.entity.OrganizationEntity;
+import itmo.efarinov.soa.crudservice.interfaces.mapper.IOrganizationMapper;
 import itmo.efarinov.soa.dto.OrganizationDto;
-import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 
 @Stateless
-@LocalBean
-public class OrganizationEntityMapper implements CommonEntityMapper<OrganizationEntity, OrganizationDto> {
+public class OrganizationEntityMapper implements IOrganizationMapper {
     @Override
     public OrganizationEntity toModel(OrganizationDto dto) {
         return OrganizationEntity

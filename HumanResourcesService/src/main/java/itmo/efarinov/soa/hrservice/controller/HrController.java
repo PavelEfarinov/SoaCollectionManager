@@ -1,13 +1,9 @@
 package itmo.efarinov.soa.hrservice.controller;
 
 import itmo.efarinov.soa.dto.ErrorDto;
-import itmo.efarinov.soa.dto.WorkerDto;
-import itmo.efarinov.soa.dto.get.GetOrganizationDto;
-import itmo.efarinov.soa.dto.get.GetWorkerDto;
-import itmo.efarinov.soa.hrservice.exceptions.NestedRequestException;
-import itmo.efarinov.soa.hrservice.facade.OrganizationFacade;
-import itmo.efarinov.soa.hrservice.facade.WorkerFacade;
-
+import itmo.efarinov.soa.hrservice.facade.exceptions.NestedRequestException;
+import itmo.efarinov.soa.hrservice.interfaces.IHrService;
+import jakarta.ejb.EJB;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -17,13 +13,9 @@ import jakarta.ws.rs.core.Response;
 
 @Path("")
 public class HrController {
-    private final WorkerFacade workerFacade;
-    private final OrganizationFacade orgFacade;
 
-    public HrController() {
-        workerFacade = new WorkerFacade();
-        orgFacade = new OrganizationFacade();
-    }
+    @EJB
+    IHrService hrService;
 
     @POST
     @Path("/move/{worker_id}/{old_organization_id}/{new_organization_id}")
@@ -45,27 +37,7 @@ public class HrController {
         }
 
         try {
-            GetWorkerDto worker = workerFacade.getById(workerId);
-
-            if (worker.organization.id != oldOrgId) {
-                throw new NestedRequestException("Worker with id " + workerId + " has different organization");
-            }
-
-            GetOrganizationDto oldOrg = orgFacade.getById(oldOrgId);
-            GetOrganizationDto newOrg = orgFacade.getById(newOrgId);
-
-            WorkerDto withNewSalary = WorkerDto
-                    .builder()
-                    .coordinatesId(worker.coordinates.id)
-                    .organizationId(newOrg.id)
-                    .salary(worker.salary)
-                    .endDate(worker.endDate)
-                    .name(worker.name)
-                    .position(worker.position)
-                    .startDate(worker.startDate)
-                    .build();
-
-            workerFacade.updateById(worker.id, withNewSalary);
+            hrService.moveEmployee(workerId, oldOrgId, newOrgId);
             return Response.ok().build();
         } catch (NestedRequestException e) {
             return Response.status(400).entity(ErrorDto.builder()
@@ -99,22 +71,8 @@ public class HrController {
         }
 
         try {
-            GetWorkerDto worker = workerFacade.getById(workerId);
-
-            WorkerDto withNewSalary = WorkerDto
-                    .builder()
-                    .coordinatesId(worker.coordinates.id)
-                    .organizationId(worker.organization.id)
-                    .salary(worker.salary * indexCoefficient)
-                    .endDate(worker.endDate)
-                    .name(worker.name)
-                    .position(worker.position)
-                    .startDate(worker.startDate)
-                    .build();
-
-            float newSalary = workerFacade.updateById(worker.id, withNewSalary).salary;
+            float newSalary = (float) hrService.indexSalary(workerId, indexCoefficient);
             return Response.ok().entity(newSalary).build();
-
         } catch (NestedRequestException e) {
             return Response.status(400)
                     .entity(

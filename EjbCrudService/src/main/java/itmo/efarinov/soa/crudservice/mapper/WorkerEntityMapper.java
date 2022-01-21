@@ -2,16 +2,12 @@ package itmo.efarinov.soa.crudservice.mapper;
 
 import itmo.efarinov.soa.crudservice.entity.Position;
 import itmo.efarinov.soa.crudservice.entity.WorkerEntity;
+import itmo.efarinov.soa.crudservice.interfaces.mapper.IWorkerMapper;
 import itmo.efarinov.soa.dto.WorkerDto;
-import jakarta.ejb.EJB;
-import jakarta.ejb.LocalBean;
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Named;
 
 @Stateless
-@LocalBean
-public class WorkerEntityMapper implements CommonEntityMapper<WorkerEntity, WorkerDto> {
+public class WorkerEntityMapper implements IWorkerMapper {
     @Override
     public WorkerEntity toModel(WorkerDto dto) {
         return WorkerEntity.builder()

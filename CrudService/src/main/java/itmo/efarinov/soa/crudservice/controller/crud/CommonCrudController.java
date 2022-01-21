@@ -1,13 +1,14 @@
 package itmo.efarinov.soa.crudservice.controller.crud;
 
-import itmo.efarinov.soa.crudservice.controller.CommonApplicationController;
+import itmo.efarinov.soa.crudservice.utils.CommonControllerHelper;
+import itmo.efarinov.soa.crudservice.interfaces.utils.ICommonControllerHelper;
 import itmo.efarinov.soa.crudservice.entity.CommonEntity;
 import itmo.efarinov.soa.crudservice.error.BadRequestException;
-import itmo.efarinov.soa.crudservice.filter.CommonEntityFilterMapper;
 import itmo.efarinov.soa.crudservice.filter.SortingOrder;
 import itmo.efarinov.soa.crudservice.filter.SortingOrderType;
-import itmo.efarinov.soa.crudservice.mapper.CommonEntityMapper;
-import itmo.efarinov.soa.crudservice.repository.CommonCrudRepository;
+import itmo.efarinov.soa.crudservice.interfaces.filter.IEntityFilterMapper;
+import itmo.efarinov.soa.crudservice.interfaces.mapper.ICommonEntityMapper;
+import itmo.efarinov.soa.crudservice.interfaces.repository.ICrudRepository;
 import itmo.efarinov.soa.dto.CommonDto;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -17,16 +18,23 @@ import lombok.SneakyThrows;
 import javax.validation.Valid;
 import java.util.List;
 
-public abstract class CommonCrudController<T extends CommonEntity<DT>, DT extends CommonDto> extends CommonApplicationController<T> {
+public abstract class CommonCrudController<
+        T extends CommonEntity<DT>,
+        DT extends CommonDto,
+        RT extends ICrudRepository<T>,
+        EMT extends ICommonEntityMapper<T, DT>,
+        EFMT extends IEntityFilterMapper<T>> {
 
-    protected CommonCrudRepository<T> entityRepository;
-    protected CommonEntityMapper<T, DT> entityMapper;
+    protected ICommonControllerHelper controllerHelper;
 
-    protected CommonCrudController(CommonEntityFilterMapper<T> entityFilterMapper, CommonCrudRepository<T> repository, CommonEntityMapper<T, DT> entityMapper) {
-        super(entityFilterMapper);
-        entityRepository = repository;
+    protected RT entityRepository;
+    protected EMT entityMapper;
+
+    protected void init(RT entityRepository, EMT entityMapper, EFMT filterMapper)
+    {
+        this.entityRepository = entityRepository;
         this.entityMapper = entityMapper;
-        System.out.println("CONTROLLER " + this.getClass().getSimpleName() + " IS ALIVE");
+        controllerHelper = new CommonControllerHelper<>(filterMapper);
     }
 
     @GET
@@ -83,7 +91,7 @@ public abstract class CommonCrudController<T extends CommonEntity<DT>, DT extend
     @SneakyThrows
     @Produces(MediaType.TEXT_PLAIN)
     protected Response doGetCount(String filtersParam) {
-        return Response.ok().entity(entityRepository.countByFilter(getFilters(filtersParam))).build();
+        return Response.ok().entity(entityRepository.countByFilter(controllerHelper.getFilters(filtersParam))).build();
     }
 
     protected Response doDelete(Integer id) {
@@ -134,12 +142,12 @@ public abstract class CommonCrudController<T extends CommonEntity<DT>, DT extend
         } else {
             pageSize = 10;
         }
-        SortingOrder orderBy = getSortingOrder(orderByParam);
+        SortingOrder orderBy = controllerHelper.getSortingOrder(orderByParam);
         if (orderBy == null) {
             orderBy = SortingOrder.builder().fieldName("id").type(SortingOrderType.ASC).build();
         }
 
-        List<T> list = entityRepository.getByFilter(getFilters(filterParam), pageSize, page, orderBy);
+        List<T> list = entityRepository.getByFilter(controllerHelper.getFilters(filterParam), pageSize, page, orderBy);
         return Response.ok().entity(list).build();
     }
 }

@@ -1,25 +1,20 @@
 package itmo.efarinov.soa.crudservice.filter;
 
-import itmo.efarinov.soa.crudservice.entity.WorkerEntity;
 import itmo.efarinov.soa.crudservice.filter.error.BadFilterException;
+import itmo.efarinov.soa.crudservice.interfaces.filter.IWorkerFilterMapper;
 import itmo.efarinov.soa.dto.FilterDto;
-import jakarta.ejb.LocalBean;
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Named;
 import lombok.SneakyThrows;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Stateless
-@LocalBean
-public class WorkerFilterMapper implements CommonEntityFilterMapper<WorkerEntity> {
+public class WorkerFilterMapper implements IWorkerFilterMapper {
     @Override
     @SneakyThrows
     public FilterPredicate<?> mapToModel(FilterDto dto) {
-        if(dto.getFieldValue() == null)
-        {
+        if (dto.getFieldValue() == null) {
             throw new BadFilterException(dto.getFieldName() + " should be not null");
         }
 

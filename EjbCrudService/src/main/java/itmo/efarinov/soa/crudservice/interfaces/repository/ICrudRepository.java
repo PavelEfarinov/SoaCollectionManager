@@ -1,15 +1,12 @@
-package itmo.efarinov.soa.crudservice.repository;
+package itmo.efarinov.soa.crudservice.interfaces.repository;
 
 import itmo.efarinov.soa.crudservice.filter.FilterPredicate;
 import itmo.efarinov.soa.crudservice.filter.SortingOrder;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Remote;
 
 import javax.persistence.criteria.CriteriaQuery;
 import javax.validation.Valid;
 import java.util.List;
 
-@Remote
 public interface ICrudRepository<T> {
     void save(@Valid T entity);
 

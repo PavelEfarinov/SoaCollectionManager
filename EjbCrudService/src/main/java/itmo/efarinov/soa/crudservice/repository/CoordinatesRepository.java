@@ -1,12 +1,11 @@
 package itmo.efarinov.soa.crudservice.repository;
 
 import itmo.efarinov.soa.crudservice.entity.CoordinatesEntity;
-import jakarta.ejb.LocalBean;
+import itmo.efarinov.soa.crudservice.interfaces.repository.ICoordinatesRepository;
 import jakarta.ejb.Stateless;
 
 @Stateless
-@LocalBean
-public class CoordinatesRepository extends CommonCrudRepository<CoordinatesEntity> {
+public class CoordinatesRepository extends CommonCrudRepository<CoordinatesEntity>  implements ICoordinatesRepository {
     public CoordinatesRepository() {
         super(CoordinatesEntity.class);
     }

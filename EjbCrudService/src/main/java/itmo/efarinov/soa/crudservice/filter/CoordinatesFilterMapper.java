@@ -2,16 +2,15 @@ package itmo.efarinov.soa.crudservice.filter;
 
 import itmo.efarinov.soa.crudservice.entity.CoordinatesEntity;
 import itmo.efarinov.soa.crudservice.filter.error.BadFilterException;
+import itmo.efarinov.soa.crudservice.interfaces.filter.ICoordinatesFilterMapper;
+import itmo.efarinov.soa.crudservice.interfaces.filter.IEntityFilterMapper;
 import itmo.efarinov.soa.dto.FilterDto;
-import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Named;
 import lombok.SneakyThrows;
 
 @Stateless
-@LocalBean
-public class CoordinatesFilterMapper implements CommonEntityFilterMapper<CoordinatesEntity> {
+public class CoordinatesFilterMapper implements ICoordinatesFilterMapper {
     @Override
     @SneakyThrows
     public FilterPredicate<?> mapToModel(FilterDto dto) {

@@ -2,16 +2,15 @@ package itmo.efarinov.soa.crudservice.filter;
 
 import itmo.efarinov.soa.crudservice.entity.OrganizationEntity;
 import itmo.efarinov.soa.crudservice.filter.error.BadFilterException;
+import itmo.efarinov.soa.crudservice.interfaces.filter.IEntityFilterMapper;
+import itmo.efarinov.soa.crudservice.interfaces.filter.IOrganizationFilterMapper;
 import itmo.efarinov.soa.dto.FilterDto;
 import jakarta.ejb.LocalBean;
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Named;
 import lombok.SneakyThrows;
 
 @Stateless
-@LocalBean
-public class OrganizationsFilterMapper implements CommonEntityFilterMapper<OrganizationEntity> {
+public class OrganizationsFilterMapper implements IOrganizationFilterMapper {
     @Override
     @SneakyThrows
     public FilterPredicate<?> mapToModel(FilterDto dto) {

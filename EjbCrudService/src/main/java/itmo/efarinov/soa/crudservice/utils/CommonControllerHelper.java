@@ -1,35 +1,36 @@
-package itmo.efarinov.soa.crudservice.controller;
+package itmo.efarinov.soa.crudservice.utils;
 
 import com.google.gson.reflect.TypeToken;
 import itmo.efarinov.soa.crudservice.entity.CommonEntity;
-import itmo.efarinov.soa.crudservice.error.BadRequestException;
-import itmo.efarinov.soa.crudservice.filter.CommonEntityFilterMapper;
 import itmo.efarinov.soa.crudservice.filter.FilterPredicate;
 import itmo.efarinov.soa.crudservice.filter.SortingOrder;
 import itmo.efarinov.soa.crudservice.filter.error.BadFilterException;
+import itmo.efarinov.soa.crudservice.interfaces.utils.ICommonControllerHelper;
+import itmo.efarinov.soa.crudservice.interfaces.filter.IEntityFilterMapper;
 import itmo.efarinov.soa.dto.FilterDto;
 import itmo.efarinov.soa.json.gson.GsonObjectMapper;
+import jakarta.ws.rs.BadRequestException;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CommonApplicationController<T extends CommonEntity> {
+public class CommonControllerHelper<T extends CommonEntity, EMT extends IEntityFilterMapper<T>> implements ICommonControllerHelper {
 
-    protected final CommonEntityFilterMapper<T> entityFilterMapper;
+    protected EMT entityFilterMapper;
 
-    public CommonApplicationController(CommonEntityFilterMapper<T> entityFilterMapper) {
+    public CommonControllerHelper(EMT entityFilterMapper) {
         this.entityFilterMapper = entityFilterMapper;
     }
 
-    protected void log(String s)
-    {
+    public void log(String s) {
         System.out.println(s);
     }
 
     @SneakyThrows
-    protected List<FilterPredicate<?>> getFilters(String queryParam) {
+    @Override
+    public List<FilterPredicate<?>> getFilters(String queryParam) {
         log("FILTERS" + queryParam);
         Type listType = new TypeToken<ArrayList<FilterDto>>() {
         }.getType();
@@ -48,7 +49,8 @@ public abstract class CommonApplicationController<T extends CommonEntity> {
     }
 
     @SneakyThrows
-    protected SortingOrder getSortingOrder(String queryParam) {
+    @Override
+    public SortingOrder getSortingOrder(String queryParam) {
         log("SORTING" + queryParam);
         try {
             SortingOrder result = GsonObjectMapper.fromJson(queryParam, SortingOrder.class);

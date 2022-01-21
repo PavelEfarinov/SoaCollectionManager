@@ -1,19 +1,20 @@
 package itmo.efarinov.soa.hrservice.facade;
 
 import itmo.efarinov.soa.dto.ErrorDto;
-import itmo.efarinov.soa.hrservice.exceptions.NestedRequestException;
-import lombok.SneakyThrows;
-
+import itmo.efarinov.soa.hrservice.facade.exceptions.NestedRequestException;
+import itmo.efarinov.soa.hrservice.interfaces.ICrudFacade;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import lombok.SneakyThrows;
+
 import java.io.FileInputStream;
 import java.security.KeyStore;
 
-public abstract class CrudFacade<T, DT> {
+public abstract class CrudFacade<T, DT> implements ICrudFacade<T, DT> {
     private final String pathSuffix;
     private final Class<T> runtimeClass;
 
@@ -25,7 +26,7 @@ public abstract class CrudFacade<T, DT> {
     @SneakyThrows
     private WebTarget getTarget() {
         javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
-                new javax.net.ssl.HostnameVerifier(){
+                new javax.net.ssl.HostnameVerifier() {
                     public boolean verify(String hostname,
                                           javax.net.ssl.SSLSession sslSession) {
                         return true;
@@ -68,7 +69,7 @@ public abstract class CrudFacade<T, DT> {
         try {
             response.bufferEntity();
             ErrorDto error = response.readEntity(ErrorDto.class);
-            return error != null;
+            return error != null && error.error != null && error.message != null;
         } catch (Exception e) {
             System.out.println(e);
             return false;
