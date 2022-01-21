@@ -20,7 +20,7 @@ import NumberInput from "../NumberInput";
 
 export default function EditWorkerDialog(props) {
     const positions = ['DIRECTOR', 'HEAD_OF_DIVISION', 'HEAD_OF_DEPARTMENT', 'LEAD_DEVELOPER', 'BAKER'];
-    const [oldOrganizationId, setOldOrganizationId] = useState(props.item.organization ? JSON.parse(props.item.organization).id : null);
+    const [oldOrganizationId, setOldOrganizationId] = useState(props.item.organization != null ? JSON.parse(props.item.organization).id : null);
     const [organizations, setOrganizations] = useState([]);
     const [index, setIndex] = useState(1.0);
     const [coordinates, setCoordinates] = useState([]);
@@ -32,7 +32,7 @@ export default function EditWorkerDialog(props) {
         startDate: dayjz(props.item.startDate),
         endDate: props.item.endDate ? dayjz(props.item.endDate, "YYYY-MM-DDTHH:mm:ssZ") : null,
         coordinates: JSON.parse(props.item.coordinates),
-        organization: props.item.organization ? JSON.parse(props.item.organization) : null,
+        organization: props.item.organization != null ? JSON.parse(props.item.organization) : null,
     });
 
     const [errors, setErrors] = useState({});

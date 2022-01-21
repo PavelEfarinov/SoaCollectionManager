@@ -24,6 +24,7 @@ public class WorkerDto extends CommonDto{
     @NotNull
     public java.time.LocalDateTime startDate; //Поле не может быть null
     public java.time.LocalDateTime endDate; //Поле может быть null
+    @NotNull
     public PositionDto position; //Поле не может быть null
     public Integer organizationId; //Поле может быть null
 }
