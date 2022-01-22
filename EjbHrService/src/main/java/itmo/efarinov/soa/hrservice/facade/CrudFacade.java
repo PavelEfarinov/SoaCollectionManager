@@ -1,8 +1,10 @@
 package itmo.efarinov.soa.hrservice.facade;
 
 import itmo.efarinov.soa.dto.ErrorDto;
+import itmo.efarinov.soa.hrservice.consul.ServiceConnector;
 import itmo.efarinov.soa.hrservice.facade.exceptions.NestedRequestException;
 import itmo.efarinov.soa.hrservice.interfaces.ICrudFacade;
+import jakarta.ejb.EJB;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -18,6 +20,8 @@ public abstract class CrudFacade<T, DT> implements ICrudFacade<T, DT> {
     private final String pathSuffix;
     private final Class<T> runtimeClass;
 
+    @EJB
+    private ServiceConnector consulConnector;
     public CrudFacade(String path, Class<T> clazz) {
         runtimeClass = clazz;
         pathSuffix = path;
@@ -40,7 +44,8 @@ public abstract class CrudFacade<T, DT> implements ICrudFacade<T, DT> {
         KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
         keystore.load(is, keystorePassword.toCharArray());
         Client client = ClientBuilder.newBuilder().trustStore(keystore).build();
-        return client.target(System.getenv("APP_URL"));
+//        return client.target(System.getenv("APP_URL"));
+        return client.target(consulConnector.DiscoverRunningCrudService());
     }
 
     private WebTarget getEntityTarget() {
