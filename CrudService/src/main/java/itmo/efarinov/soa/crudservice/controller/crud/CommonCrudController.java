@@ -1,14 +1,13 @@
 package itmo.efarinov.soa.crudservice.controller.crud;
 
-import itmo.efarinov.soa.crudservice.utils.CommonControllerHelper;
-import itmo.efarinov.soa.crudservice.interfaces.utils.ICommonControllerHelper;
-import itmo.efarinov.soa.crudservice.entity.CommonEntity;
+import itmo.efarinov.soa.crud.interfaces.utils.ICommonControllerHelper;
+import itmo.efarinov.soa.crud.entity.CommonEntity;
 import itmo.efarinov.soa.crudservice.error.BadRequestException;
-import itmo.efarinov.soa.crudservice.filter.SortingOrder;
-import itmo.efarinov.soa.crudservice.filter.SortingOrderType;
-import itmo.efarinov.soa.crudservice.interfaces.filter.IEntityFilterMapper;
-import itmo.efarinov.soa.crudservice.interfaces.mapper.ICommonEntityMapper;
-import itmo.efarinov.soa.crudservice.interfaces.repository.ICrudRepository;
+import itmo.efarinov.soa.crud.filter.SortingOrder;
+import itmo.efarinov.soa.crud.filter.SortingOrderType;
+import itmo.efarinov.soa.crud.interfaces.filter.IEntityFilterMapper;
+import itmo.efarinov.soa.crud.interfaces.mapper.ICommonEntityMapper;
+import itmo.efarinov.soa.crud.interfaces.repository.ICrudRepository;
 import itmo.efarinov.soa.dto.CommonDto;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;

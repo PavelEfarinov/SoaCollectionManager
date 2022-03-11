@@ -24,7 +24,7 @@ public class StartupConsulClient {
         Consul client = Consul.builder().build();
         agentClient = client.agentClient();
 
-        Registration service = ImmutableRegistration.builder()
+        ImmutableRegistration service = ImmutableRegistration.builder()
                 .id(serviceId)
                 .name("crud-service")
                 .port(8181)

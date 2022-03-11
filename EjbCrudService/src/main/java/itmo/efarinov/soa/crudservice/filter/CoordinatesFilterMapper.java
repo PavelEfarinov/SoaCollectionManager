@@ -1,9 +1,9 @@
 package itmo.efarinov.soa.crudservice.filter;
 
-import itmo.efarinov.soa.crudservice.entity.CoordinatesEntity;
-import itmo.efarinov.soa.crudservice.filter.error.BadFilterException;
-import itmo.efarinov.soa.crudservice.interfaces.filter.ICoordinatesFilterMapper;
-import itmo.efarinov.soa.crudservice.interfaces.filter.IEntityFilterMapper;
+import itmo.efarinov.soa.crud.filter.FilterPredicate;
+import itmo.efarinov.soa.crud.filter.FilterPredicateType;
+import itmo.efarinov.soa.crud.filter.error.BadFilterException;
+import itmo.efarinov.soa.crud.interfaces.filter.ICoordinatesFilterMapper;
 import itmo.efarinov.soa.dto.FilterDto;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;

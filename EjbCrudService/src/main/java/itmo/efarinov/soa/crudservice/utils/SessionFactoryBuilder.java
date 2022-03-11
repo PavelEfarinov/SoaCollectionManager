@@ -1,6 +1,9 @@
 package itmo.efarinov.soa.crudservice.utils;
 
-import itmo.efarinov.soa.crudservice.entity.*;
+import itmo.efarinov.soa.crud.entity.CoordinatesEntity;
+import itmo.efarinov.soa.crud.entity.OrganizationEntity;
+import itmo.efarinov.soa.crud.entity.Position;
+import itmo.efarinov.soa.crud.entity.WorkerEntity;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;

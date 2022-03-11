@@ -2,7 +2,8 @@ package itmo.efarinov.soa.hrservice.facade;
 
 import itmo.efarinov.soa.dto.WorkerDto;
 import itmo.efarinov.soa.dto.get.GetWorkerDto;
-import itmo.efarinov.soa.hrservice.interfaces.IWorkerFacade;
+import itmo.efarinov.soa.hr.interfaces.IWorkerFacade;
+import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 
 @Stateless

@@ -1,9 +1,9 @@
 package itmo.efarinov.soa.crudservice.repository;
 
-import itmo.efarinov.soa.crudservice.filter.FilterPredicate;
-import itmo.efarinov.soa.crudservice.filter.SortingOrder;
-import itmo.efarinov.soa.crudservice.filter.error.MaxPageNumberExceededException;
-import itmo.efarinov.soa.crudservice.interfaces.repository.ICrudRepository;
+import itmo.efarinov.soa.crud.filter.FilterPredicate;
+import itmo.efarinov.soa.crud.filter.SortingOrder;
+import itmo.efarinov.soa.crud.filter.error.MaxPageNumberExceededException;
+import itmo.efarinov.soa.crud.interfaces.repository.ICrudRepository;
 import itmo.efarinov.soa.crudservice.utils.SessionFactoryBuilder;
 import lombok.SneakyThrows;
 

@@ -1,10 +1,11 @@
 package itmo.efarinov.soa.json;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import itmo.efarinov.soa.json.gson.GsonObjectMapper;
 
-public abstract class JsonableModel {
+import java.io.Serializable;
+
+public abstract class JsonableModel implements Serializable {
     public String toJson() {
         return GsonObjectMapper.Mapper.toJson(this);
     }

@@ -6,10 +6,10 @@
     <persistence-unit name="default">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java://jdbc/postgres</jta-data-source>
-        <class>itmo.efarinov.soa.crudservice.entity.WorkerEntity</class>
-        <class>itmo.efarinov.soa.crudservice.entity.CoordinatesEntity</class>
-        <class>itmo.efarinov.soa.crudservice.entity.OrganizationEntity</class>
-        <class>itmo.efarinov.soa.crudservice.entity.Position</class>
+        <class>crud.entity.WorkerEntity</class>
+        <class>crud.entity.CoordinatesEntity</class>
+        <class>crud.entity.OrganizationEntity</class>
+        <class>crud.entity.Position</class>
         <properties>
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />

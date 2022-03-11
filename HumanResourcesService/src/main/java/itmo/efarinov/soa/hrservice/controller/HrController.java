@@ -1,9 +1,11 @@
 package itmo.efarinov.soa.hrservice.controller;
 
 import itmo.efarinov.soa.dto.ErrorDto;
-import itmo.efarinov.soa.hrservice.facade.exceptions.NestedRequestException;
-import itmo.efarinov.soa.hrservice.interfaces.IHrService;
+import itmo.efarinov.soa.exceptions.NestedRequestException;
+import itmo.efarinov.soa.hr.interfaces.IHrService;
 import jakarta.ejb.EJB;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -12,6 +14,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("")
+@Stateless
+@LocalBean
 public class HrController {
 
     @EJB

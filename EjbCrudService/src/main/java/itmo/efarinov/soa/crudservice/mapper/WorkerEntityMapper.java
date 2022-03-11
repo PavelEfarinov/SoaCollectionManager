@@ -1,9 +1,10 @@
 package itmo.efarinov.soa.crudservice.mapper;
 
-import itmo.efarinov.soa.crudservice.entity.Position;
-import itmo.efarinov.soa.crudservice.entity.WorkerEntity;
-import itmo.efarinov.soa.crudservice.interfaces.mapper.IWorkerMapper;
+import itmo.efarinov.soa.crud.entity.Position;
+import itmo.efarinov.soa.crud.entity.WorkerEntity;
+import itmo.efarinov.soa.crud.interfaces.mapper.IWorkerMapper;
 import itmo.efarinov.soa.dto.WorkerDto;
+import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 
 @Stateless

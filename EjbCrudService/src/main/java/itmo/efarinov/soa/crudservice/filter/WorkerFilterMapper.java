@@ -1,13 +1,17 @@
 package itmo.efarinov.soa.crudservice.filter;
 
-import itmo.efarinov.soa.crudservice.filter.error.BadFilterException;
-import itmo.efarinov.soa.crudservice.interfaces.filter.IWorkerFilterMapper;
+import itmo.efarinov.soa.crud.filter.FilterPredicate;
+import itmo.efarinov.soa.crud.filter.FilterPredicateType;
+import itmo.efarinov.soa.crud.filter.error.BadFilterException;
+import itmo.efarinov.soa.crud.interfaces.filter.IWorkerFilterMapper;
 import itmo.efarinov.soa.dto.FilterDto;
+import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import lombok.SneakyThrows;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 
 @Stateless
 public class WorkerFilterMapper implements IWorkerFilterMapper {

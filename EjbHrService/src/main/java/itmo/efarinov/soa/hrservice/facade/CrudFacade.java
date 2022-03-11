@@ -2,8 +2,8 @@ package itmo.efarinov.soa.hrservice.facade;
 
 import itmo.efarinov.soa.dto.ErrorDto;
 import itmo.efarinov.soa.hrservice.consul.ServiceConnector;
-import itmo.efarinov.soa.hrservice.facade.exceptions.NestedRequestException;
-import itmo.efarinov.soa.hrservice.interfaces.ICrudFacade;
+import itmo.efarinov.soa.exceptions.NestedRequestException;
+import itmo.efarinov.soa.hr.interfaces.ICrudFacade;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;

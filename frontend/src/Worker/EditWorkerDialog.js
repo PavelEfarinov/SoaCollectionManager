@@ -30,7 +30,7 @@ export default function EditWorkerDialog(props) {
         position: props.item.position,
         salary: props.item.salary,
         startDate: dayjz(props.item.startDate),
-        endDate: props.item.endDate ? dayjz(props.item.endDate, "YYYY-MM-DDTHH:mm:ssZ") : null,
+        endDate: props.item.endDate ? dayjz(props.item.endDate, "YYYY-MM-DDTHH:mm:ss") : null,
         coordinates: JSON.parse(props.item.coordinates),
         organization: props.item.organization != null ? JSON.parse(props.item.organization) : null,
     });

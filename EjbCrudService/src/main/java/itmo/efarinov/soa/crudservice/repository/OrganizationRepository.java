@@ -1,7 +1,7 @@
 package itmo.efarinov.soa.crudservice.repository;
 
-import itmo.efarinov.soa.crudservice.entity.OrganizationEntity;
-import itmo.efarinov.soa.crudservice.interfaces.repository.IOrganizationRepository;
+import itmo.efarinov.soa.crud.entity.OrganizationEntity;
+import itmo.efarinov.soa.crud.interfaces.repository.IOrganizationRepository;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 

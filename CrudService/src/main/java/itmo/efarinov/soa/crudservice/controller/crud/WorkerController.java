@@ -1,15 +1,16 @@
 package itmo.efarinov.soa.crudservice.controller.crud;
 
-import itmo.efarinov.soa.crudservice.entity.WorkerEntity;
-import itmo.efarinov.soa.crudservice.interfaces.filter.IWorkerFilterMapper;
-import itmo.efarinov.soa.crudservice.interfaces.mapper.IWorkerMapper;
-import itmo.efarinov.soa.crudservice.interfaces.repository.ICoordinatesRepository;
-import itmo.efarinov.soa.crudservice.interfaces.repository.IOrganizationRepository;
-import itmo.efarinov.soa.crudservice.interfaces.repository.IWorkerRepository;
-import itmo.efarinov.soa.crudservice.repository.WorkerRepository;
+import itmo.efarinov.soa.crud.entity.WorkerEntity;
+import itmo.efarinov.soa.crud.interfaces.filter.IWorkerFilterMapper;
+import itmo.efarinov.soa.crud.interfaces.mapper.IWorkerMapper;
+import itmo.efarinov.soa.crud.interfaces.repository.ICoordinatesRepository;
+import itmo.efarinov.soa.crud.interfaces.repository.IOrganizationRepository;
+import itmo.efarinov.soa.crud.interfaces.repository.IWorkerRepository;
 import itmo.efarinov.soa.dto.WorkerDto;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -18,6 +19,8 @@ import lombok.SneakyThrows;
 import javax.validation.Valid;
 
 @Path("/workers/")
+@Stateless
+@LocalBean
 public class WorkerController extends CommonCrudController<
         WorkerEntity,
         WorkerDto,

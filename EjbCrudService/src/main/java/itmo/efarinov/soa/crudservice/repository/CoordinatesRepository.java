@@ -1,7 +1,8 @@
 package itmo.efarinov.soa.crudservice.repository;
 
-import itmo.efarinov.soa.crudservice.entity.CoordinatesEntity;
-import itmo.efarinov.soa.crudservice.interfaces.repository.ICoordinatesRepository;
+import itmo.efarinov.soa.crud.entity.CoordinatesEntity;
+import itmo.efarinov.soa.crud.interfaces.repository.ICoordinatesRepository;
+import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 
 @Stateless

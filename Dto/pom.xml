@@ -38,6 +38,18 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.13.0</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>9.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.1.Final</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

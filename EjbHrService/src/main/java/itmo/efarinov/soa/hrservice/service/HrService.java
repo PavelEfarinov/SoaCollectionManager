@@ -4,11 +4,12 @@ package itmo.efarinov.soa.hrservice.service;
 import itmo.efarinov.soa.dto.WorkerDto;
 import itmo.efarinov.soa.dto.get.GetOrganizationDto;
 import itmo.efarinov.soa.dto.get.GetWorkerDto;
-import itmo.efarinov.soa.hrservice.facade.exceptions.NestedRequestException;
-import itmo.efarinov.soa.hrservice.interfaces.IHrService;
-import itmo.efarinov.soa.hrservice.interfaces.IOrganizationFacade;
-import itmo.efarinov.soa.hrservice.interfaces.IWorkerFacade;
+import itmo.efarinov.soa.exceptions.NestedRequestException;
+import itmo.efarinov.soa.hr.interfaces.IHrService;
+import itmo.efarinov.soa.hr.interfaces.IOrganizationFacade;
+import itmo.efarinov.soa.hr.interfaces.IWorkerFacade;
 import jakarta.ejb.EJB;
+import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import lombok.SneakyThrows;
 
