@@ -10,6 +10,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(name = "organizations")
@@ -17,7 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrganizationEntity extends CommonEntity<OrganizationDto> {
+public class OrganizationEntity extends CommonEntity<OrganizationDto> implements Serializable {
     @NotNull
     private String fullName;
     @Min(0)

@@ -1,6 +1,8 @@
 package itmo.efarinov.soa.crud.entity;
 
-public enum Position {
+import java.io.Serializable;
+
+public enum Position implements Serializable {
     DIRECTOR,
     HEAD_OF_DIVISION,
     HEAD_OF_DEPARTMENT,

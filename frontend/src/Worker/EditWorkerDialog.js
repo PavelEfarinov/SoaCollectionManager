@@ -30,7 +30,7 @@ export default function EditWorkerDialog(props) {
         position: props.item.position,
         salary: props.item.salary,
         startDate: dayjz(props.item.startDate),
-        endDate: props.item.endDate ? dayjz(props.item.endDate, "YYYY-MM-DDTHH:mm:ss") : null,
+        endDate: props.item.endDate ? dayjz(props.item.endDate) : null,
         coordinates: JSON.parse(props.item.coordinates),
         organization: props.item.organization != null ? JSON.parse(props.item.organization) : null,
     });
@@ -72,7 +72,7 @@ export default function EditWorkerDialog(props) {
 
     const updateOnlyOrg = useCallback((newOrg) => {
         setSubmitting(true);
-        axios.post(`/hr/api/move/${worker.id}/${oldOrganizationId}/${newOrg.id}`)
+        axios.post(`/api/move/${worker.id}/${oldOrganizationId}/${newOrg.id}`)
             .then(function (response) {
                 setOldOrganizationId(newOrg.id)
                 worker.organization = newOrg;
@@ -87,7 +87,7 @@ export default function EditWorkerDialog(props) {
 
     const updateOnlySalary = useCallback(() => {
         setSubmitting(true);
-        axios.post(`/hr/api/index/${worker.id}/${index}`)
+        axios.post(`/api/index/${worker.id}/${index}`)
             .then(function (response) {
                 worker.salary = response.data;
                 setWorker(Object.assign({}, worker));
@@ -129,7 +129,7 @@ export default function EditWorkerDialog(props) {
                 workerDto.organizationId = worker.organization.id;
             }
             if (worker.endDate) {
-                workerDto.endDate = worker.endDate;
+                workerDto.endDate = worker.endDate.format('YYYY-MM-DDTHH:mm:ss');
             }
             setSubmitting(true);
             axios.put('/app/api/workers/' + worker.id, workerDto)

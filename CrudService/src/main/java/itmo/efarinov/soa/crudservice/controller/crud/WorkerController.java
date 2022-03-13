@@ -62,8 +62,13 @@ public class WorkerController extends CommonCrudController<
     @SneakyThrows
     @Produces(MediaType.APPLICATION_JSON)
     public Response doPutMethod(@PathParam("id") Integer id, WorkerDto putArgs) {
-        WorkerEntity worker = entityMapper.toModel(putArgs);
-        worker.setId(id);
+        WorkerEntity worker = entityRepository.getById(id);
+        WorkerEntity newWorker = entityMapper.toModel(putArgs);
+        worker.setStartDate(newWorker.getStartDate());
+        worker.setSalary(newWorker.getSalary());
+        worker.setPosition(newWorker.getPosition());
+        worker.setEndDate(newWorker.getEndDate());
+
         if (putArgs.getOrganizationId() != null) {
             worker.setOrganization(organizationRepository.getById(putArgs.getOrganizationId()));
         }

@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(name = "workers")
@@ -19,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WorkerEntity extends CommonEntity<WorkerDto> {
+public class WorkerEntity extends CommonEntity<WorkerDto> implements Serializable {
     @NotNull
     @NotBlank
     private String name; //Поле не может быть null, Строка не может быть пустой

@@ -10,6 +10,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(name = "coordinates")
@@ -17,7 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CoordinatesEntity extends CommonEntity<CoordinatesDto> {
+public class CoordinatesEntity extends CommonEntity<CoordinatesDto> implements Serializable {
     @Min(-485)
     @NotNull
     private int x;
